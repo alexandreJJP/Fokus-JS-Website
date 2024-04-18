@@ -1,3 +1,4 @@
+
 const html = document.querySelector('html')
 
 function log(texto){
@@ -32,11 +33,13 @@ const AudioPause = new Audio("/sons/pause.mp3")
 
 
 // VARIÁVEIS DE TEMPO
-let tempoDecorridoEmSegundos = 5
+let tempoDecorridoEmSegundos = 1500
 let intervaloId = null
 
 // FUNÇÕES
+
 function alterarContexto(contexto){
+    mostrarTempo()
     // retira classe do botao
     botoes.forEach(function (contexto){
         contexto.classList.remove('active')
@@ -49,6 +52,7 @@ function alterarContexto(contexto){
             tituloPrincipal.innerHTML = `
             Otimize sua produtividade,<br>
                 <strong class="app__title-strong">mergulhe no que importa.</strong>`
+                
             break;
         case 'descanso-curto':
             tituloPrincipal.innerHTML = `
@@ -72,12 +76,11 @@ function changeMainButton(texto, icone){
 
 function contagemRegressiva(){
     if (tempoDecorridoEmSegundos == 0){
-        //AudioTempoFinalizado.play()
+        AudioTempoFinalizado.play()
         musica.pause()
         pausar()
 
         alert('Tempo finalizado!')
-        tempoDecorridoEmSegundos = 5
         changeMainButton('Começar', 'play_arrow')
         
         return
@@ -88,6 +91,10 @@ function contagemRegressiva(){
 }
 
 function iniciar(){
+    if(!moverImagem()){
+        moverImagem()
+    }
+    
     if (intervaloId){
         pausar()
         return
@@ -106,18 +113,41 @@ function pausar(){
 }
 
 function mostrarTempo(){
-    const tempo = tempoDecorridoEmSegundos
-    tempoNaTela.innerHTML = `${tempo}`
-
+    const tempo = new Date(tempoDecorridoEmSegundos * 1000)
+    const tempoFormatado = tempo.toLocaleString('pt-br', {minute: '2-digit', second: '2-digit'})
+    tempoNaTela.innerHTML = `${tempoFormatado}`
 }
 
 mostrarTempo()
 
 // EVENTOS
 
+
+
+function moverImagem(){
+    
+    anime({
+        
+        targets: imagemPrincipal, // Seletor do elemento que queremos animar
+        keyframes: [
+            { translateX: 0 },       // Início: Posição inicial
+            { translateX: -300 },    // Mover 100 pixels para a esquerda
+            { translateY: -200 },    // Mover mais 100 pixels para a esquerda 
+        ],
+        duration: 2000, // Duração total da animação em milissegundos (2 segundos)
+        easing: 'easeInOutCubic', // Tipo de easing para uma animação suave
+    });
+    
+}
+
+function resetarPosicaoImagem(){
+    imagemPrincipal.style.transform = 'translateX(0)'
+}
+
 mainButton.addEventListener('click', iniciar)
 
 botaoMusica.addEventListener('change', () => {
+    
     if(musica.paused){
         musica.play()
     } else {
@@ -125,20 +155,29 @@ botaoMusica.addEventListener('change', () => {
     }
 })
 
+function confereAnimacao(){
+    if (!moverImagem()){
+        moverImagem()
+    }
+}
+
 focoBt.addEventListener('click', () =>{
+    tempoDecorridoEmSegundos = 1500
     alterarContexto('foco')
     focoBt.classList.add('active')
+    confereAnimacao()
 })
 
 curtoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundos = 300
     alterarContexto('descanso-curto')
     curtoBt.classList.add('active')
+    confereAnimacao()
 })
 
 longoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundos = 900
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')
+    confereAnimacao()
 })
-
-
-
