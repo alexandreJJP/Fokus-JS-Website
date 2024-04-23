@@ -69,7 +69,7 @@ function alterarContexto(contexto){
     }
 }
 
-function changeMainButton(texto, icone){
+function changeMainButton(texto, icone){;
     mainButton.innerHTML = `<img class="app__card-primary-butto-icon" src="/imagens/${icone}.png" alt="">
     <span>${texto}</span>`
 }
@@ -91,9 +91,6 @@ function contagemRegressiva(){
 }
 
 function iniciar(){
-    if(!moverImagem()){
-        moverImagem()
-    }
     
     if (intervaloId){
         pausar()
@@ -121,29 +118,6 @@ function mostrarTempo(){
 mostrarTempo()
 
 // EVENTOS
-
-
-
-function moverImagem(){
-    
-    anime({
-        
-        targets: imagemPrincipal, // Seletor do elemento que queremos animar
-        keyframes: [
-            { translateX: 0 },       // Início: Posição inicial
-            { translateX: -300 },    // Mover 100 pixels para a esquerda
-            { translateY: -200 },    // Mover mais 100 pixels para a esquerda 
-        ],
-        duration: 2000, // Duração total da animação em milissegundos (2 segundos)
-        easing: 'easeInOutCubic', // Tipo de easing para uma animação suave
-    });
-    
-}
-
-function resetarPosicaoImagem(){
-    imagemPrincipal.style.transform = 'translateX(0)'
-}
-
 mainButton.addEventListener('click', iniciar)
 
 botaoMusica.addEventListener('change', () => {
@@ -154,12 +128,6 @@ botaoMusica.addEventListener('change', () => {
         musica.pause()
     }
 })
-
-function confereAnimacao(){
-    if (!moverImagem()){
-        moverImagem()
-    }
-}
 
 focoBt.addEventListener('click', () =>{
     tempoDecorridoEmSegundos = 1500
